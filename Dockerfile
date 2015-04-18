@@ -4,11 +4,6 @@
 # Version     0.1
 #
 
-  #fallocate -l 4G /swapfile && \
-  #chmod 600 /swapfile && \ 
-  #mkswap /swapfile && \
-  #swapon /swapfile && \
-
 FROM huahaiy/debian
 
 MAINTAINER Huahai Yang <hyang@juji-inc.com>
@@ -33,3 +28,17 @@ RUN \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+RUN \
+  cd /phantomjs && \
+  make clean && \
+  ln -s /phantomjs/bin/phantomjs /usr/bin/phantomjs 
+
+RUN \
+  cd / && \
+  git clone https://github.com/arunkjn/screenshot-service.git 
+
+EXPOSE 8000
+
+WORKDIR /screenshot-service
+
+CMD ["phantomjs","server.js"]
